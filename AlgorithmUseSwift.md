@@ -4,16 +4,14 @@
 
 ## 1、冒泡排序
 
-**冒泡排序**（英語：**Bubble Sort**）又稱為**泡式排序**，是一種簡單的[排序算法](https://zh.wikipedia.org/wiki/排序算法)。它重複地走訪過要排序的[數列](https://zh.wikipedia.org/wiki/数列)，一次比較兩個元素，如果他們的順序錯誤就把他們交換過來。走訪數列的工作是重複地進行直到沒有再需要交換，也就是說該數列已經排序完成。這個算法的名字由來是因為越小的元素會經由交換慢慢「浮」到數列的頂端。
+冒泡排序是一种简单的排序算法。它重复地走访过要排序的数列，一次比较两个元素，如果它们的顺序错误就把它们交换过来。走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢“浮”到数列的顶端。
 
-冒泡排序對![n](https://wikimedia.org/api/rest_v1/media/math/render/svg/a601995d55609f2d9f5e233e36fbe9ea26011b3b)個項目需要[O](https://zh.wikipedia.org/wiki/大O符号)(![n^{2}](https://wikimedia.org/api/rest_v1/media/math/render/svg/ac9810bbdafe4a6a8061338db0f74e25b7952620))的比較次數，且可以[原地](https://zh.wikipedia.org/wiki/原地算法)排序。儘管這個演算法是最簡單瞭解和實作的排序算法之一，但它對於包含大量的元素的數列排序是很沒有效率的。
+算法描述：
 
-冒泡排序演算法的運作如下：
-
-1. 比較相鄰的元素。如果第一個比第二個大，就交換他們兩個。
-2. 對每一對相鄰元素作同樣的工作，從開始第一對到結尾的最後一對。這步做完後，最後的元素會是最大的數。
-3. 針對所有的元素重複以上的步驟，除了最後一個。
-4. 持續每次對越來越少的元素重複上面的步驟，直到沒有任何一對數字需要比較。
+1. 比较相邻的元素。如果第一个比第二个大，就交换它们两个；
+2. 对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对，这样在最后的元素应该会是最大的数；
+3. 针对所有的元素重复以上的步骤，除了最后一个；
+4. 重复步骤1~3，直到排序完成。
 
 了解了原理之后咱们通过代码来实现一下：
 
@@ -55,6 +53,42 @@ func bubbleSort(_ input:inout [Int]){
       break
     }
   }
+}
+```
+
+## 2、快速排序
+
+快速排序的基本思想：通过一趟排序将待排记录分隔成独立的两部分，其中一部分记录的关键字均比另一部分的关键字小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。
+
+算法描述：
+
+1. 从数列中挑出一个元素，称为 “基准”（pivot）；
+2. 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
+3. 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
+
+实现：
+
+```swift
+func quickQort(arr:inout [Int], left:Int, right:Int){
+    var partitionIndex = 0
+    if left < right {
+        partitionIndex = partition(arr: &arr, left: left, right: right)
+        quickQort(arr: &arr, left: left, right: partitionIndex - 1)
+        quickQort(arr: &arr, left: partitionIndex + 1, right: right)
+    }
+}
+
+func partition(arr:inout [Int], left:Int, right:Int) -> Int{
+    let pivot = left
+    var index = pivot + 1
+    for i in index...right {
+        if arr[i] < arr[pivot] {
+            arr.swapAt(i, index)
+            index += 1
+        }
+    }
+    arr.swapAt(pivot, index - 1)
+    return index - 1
 }
 ```
 
